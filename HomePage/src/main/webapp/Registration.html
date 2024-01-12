@@ -1,0 +1,181 @@
+	<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Registration</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+		type="text/css">
+	<style>
+		body {
+			font-family: 'Roboto', sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #edede9;
+			color: #333;
+		}
+
+
+
+		form {
+			max-width: 800px;
+			margin: 20px auto;
+			padding: 20px;
+			background-color: #f5ebe0;
+			border-radius: 10px;
+			box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+		}
+
+
+		.name_parent,
+		.div2,
+		.div3,
+		.div4 {
+			display: flex;
+			justify-content: space-evenly;
+			margin-bottom: 15px;
+			
+		}
+
+
+		.page_heading {
+			color: #bc6c25;
+			text-align: center;
+		}
+
+
+		input,select {
+			width: 100%;
+			padding: 8px;
+			margin-right: 8px;
+			margin-bottom: 15px;
+			box-sizing: border-box;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+		}
+
+
+		button {
+			background-color: #283618;
+			color: #fff;
+			padding: 10px 15px;
+			border: none;
+			border-radius: 3px;
+			cursor: pointer;
+		}
+
+		button:hover {
+			background-color: #606c38;
+		}
+
+
+		.msg {
+			text-align: center;
+			color: green;
+			margin-bottom: 15px;
+		}
+		#logout {
+			position: absolute;
+			right: 30px;
+			top: 2px;
+		}
+	</style>
+</head>
+
+<body>
+	<ul class="nav nav-tabs">
+
+		<li class="nav-item">
+			<a class="navbar-brand" href="Home.html">
+				<img src="https://drive.google.com/uc?id=1iFuzqzRuZ8NSsH9akJaVqbD3UM7I9Yh6" alt="Logo" height="40" width="40">
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="AboutUs.html">About Us</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="ADMIN_showemp.html">Show All Emps</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="http://localhost:8761/" >Eureka</a>
+		</li>
+		
+		<li class="nav-item">
+			<a href="http://localhost:1080/logout"><button class="btn btn-danger" id="logout">Logout</button></a>
+		</li>
+	</ul>
+	<h1 class="page_heading">Add Employee</h1>
+
+	<form id="employeeForm">
+		<input type="number" id="id" name="id" placeholder="Employee Id" required autocomplete="off" required>*<br>
+		<input type="email" id="username" name="username" placeholder="Email ID/UserName" required autocomplete="off" required>*<br>
+		<input type="text" id="phonenumber" name="phonenumber" placeholder="Mobile Number" required autocomplete="off" required>*<br>
+		<div class="name_parent">
+			<input class="f_name" type="text" id="f_name" name="f_name" placeholder="First Name" required>*
+			<input class="l_name" type="text" id="l_name" name="l_name" placeholder="Last Name" required>*
+		</div>
+
+		<div class="div2">
+			<input type="text" id="DOB" name="DOB" placeholder="Date Of Birth" onfocus="(this.type='date')">
+			<input type="text" id="position" name="position" placeholder="Designation" required>*
+		</div>
+
+		<div class="div3">
+			<input type="text" id="department" name="department" placeholder="Department Name" required>*
+			<input type="text" id="hire_date" name="hire_date" placeholder="Hired Date" onfocus="(this.type='date')">
+			<input type="text" id="salary" name="salary" placeholder="Salary" required>*
+		</div>
+
+		<div class="div4">
+			<input type="password" id="password" name="password" placeholder="Password" required>*
+			<input type="text" id="role" name="role" placeholder="Role" required>*
+		</div>
+
+		<button type="button" onclick="addEmployee()">Add Employee</button>
+
+		<div class="msg" id="msg"></div>
+	</form>
+
+	<h2 id="load" class="load"></h2>
+
+	<script>
+		function addEmployee() {
+
+			var employeeData = {
+				id: document.getElementById("id").value,
+				username:document.getElementById("username").value,
+				first_name: document.getElementById("f_name").value,
+				last_name: document.getElementById("l_name").value,	
+				phonenumber:document.getElementById("phonenumber").value,
+				DOB: document.getElementById("DOB").value,
+				position: document.getElementById("position").value,
+				department: document.getElementById("department").value,
+				hire_date: document.getElementById("hire_date").value,
+				salary: document.getElementById("salary").value,
+				password: document.getElementById("password").value,
+				role: document.getElementById("role").value
+			};
+			
+			console.log(JSON.stringify(employeeData));
+			console.log(typeof(employeeData.DOB));
+
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "http://localhost:8088/emp/add", true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+
+			xhr.onload = function () {
+				if (xhr.status === 201) {
+					document.getElementById("msg").innerHTML = "Employee Added Successfully";
+				} else {
+					document.getElementById("msg").innerHTML = "Failed to add employee";
+				}
+			};
+
+			xhr.send(JSON.stringify(employeeData));
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login Page</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f8f9fa;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
+
+		section {
+			width: 100%;
+		}
+
+		.container {
+			max-width: 400px;
+			margin: auto;
+		}
+
+		.card {
+			border: 1px solid #ced4da;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		.card-header {
+			background-color: #007bff;
+			color: #fff;
+			padding: 15px;
+			border-bottom: 1px solid #ced4da;
+			border-radius: 8px 8px 0 0;
+		}
+
+		.card-body {
+			padding: 20px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		input {
+			width: 100%;
+			padding: 8px;
+			margin-bottom: 15px;
+			box-sizing: border-box;
+			border: 1px solid #ced4da;
+			border-radius: 4px;
+		}
+
+		button {
+			width: 100%;
+			padding: 10px;
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+
+		button:hover {
+			background-color: #0056b3;
+		}
+
+			
+		#logoutBtn {
+			margin-top: 10px;
+			background-color: #dc3545;
+		}
+
+		#logoutBtn:hover {
+			background-color: #c82333;
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		.ed_table {
+			background-color: #F49CBB;
+			margin-top: 20px;
+			padding: 10px;
+			border: 1px solid #ced4da;
+			border-radius: 8px;
+			margin: 25px 0;
+			font-family: cursive;
+			min-width: 500px;
+			min-height: 500px;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+			font-size: large;
+			
+		}
+	</style>
+</head>
+
+<body>
+	<section>
+		<div class="container p-3">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					<div class="card" id="loginCard">
+						<div class="card-header text-center fs-4">Login Page</div>
+						<th:block th:if="${param.error}">
+							<p class="text-center text-danger fs-5">
+								[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+						</th:block>
+						<th:block th:if="${param.logout}">
+							<p class="text-center text-success fs-5">Logout Successfully</p>
+						</th:block>
+						<div class="card-body">
+							<form action="userLogin" method="post">
+								<div class="mb-3">
+									<label for="username">Enter Email</label>
+									<input type="text" name="username" class="form-control" id="username" required>
+								</div>
+								<div class="mb-3">
+									<label for="password">Enter Password</label>
+									<input type="password" name="password" class="form-control" required>
+								</div>
+								<button type="button" class="btn btn-primary col-md-12"
+									onclick="loginAndFetchData()">Login</button>
+							</form>
+						</div>
+					</div>
+
+					<div id="employeeDetails" class="hidden"></div>
+
+					<a href="http://localhost:1080/signin?logout"> <button id="logoutBtn"
+							class="btn btn-danger col-md-12 hidden"
+							href="http://localhost:1080/signin?logout">Logout</button> </a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script>
+		function loginAndFetchData() {
+			// Get the username from the input field
+			var username = document.getElementById("username").value;
+
+			// Perform AJAX request after login to fetch employee details
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "http://localhost:8089/emp/show/" + username, true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+
+			xhr.onload = function () {
+				if (xhr.status === 200) {
+					var employeeDetails = JSON.parse(xhr.responseText);
+					if (employeeDetails.role === "ADMIN") {
+						window.location.href = "http://localhost:8080/HomePage/Home.html";
+					}
+					displayEmployeeDetails(employeeDetails);
+
+				} else {
+					console.error("Failed to fetch employee details.");
+					document.getElementById("employeeDetails").innerHTML = "<p>Error fetching employee details</p>";
+				}
+			};
+
+			xhr.send();
+		}
+
+		function displayEmployeeDetails(employeeDetails) {
+			// Display employee details on the frontend
+			var detailsHtml = `
+			 <h1>Welcome ${employeeDetails.first_name} ${employeeDetails.last_name}</h1>
+                <table class="ed_table">
+                    <tr>
+                        <th>ID</th>
+                        <td>${employeeDetails.id}</td>
+                    </tr>
+                    <tr>
+                        <th>User Name</th>
+                        <td>${employeeDetails.username}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone Number</th>
+                        <td>${employeeDetails.phonenumber}</td>
+                    </tr>
+                    <tr>
+                        <th>Designation</th>
+                        <td>${employeeDetails.position}</td>
+                    </tr>
+                    <tr>
+                        <th>Department</th>
+                        <td>${employeeDetails.department}</td>
+                    </tr>
+                    <tr>
+                        <th>Joining Date</th>
+                        <td>${employeeDetails.hire_date}</td>
+                    </tr>
+                    <tr>
+                        <th>Salary</th>
+                        <td>${employeeDetails.salary}</td>
+                    </tr>
+                 
+                    <tr>
+                        <th>Role</th>
+                        <td>${employeeDetails.role}</td>
+                    </tr>
+                    <!-- Add more properties as needed -->
+                </table>
+            `;
+
+			// Update the HTML element with the employee details
+			document.getElementById("employeeDetails").innerHTML = detailsHtml;
+
+			// Hide the login form and show employee details and logout button
+			document.getElementById("loginCard").classList.add("hidden");
+			document.getElementById("employeeDetails").classList.remove("hidden");
+			document.getElementById("logoutBtn").classList.remove("hidden");
+		}
+
+		function logout() {
+			// Reset the UI to show the login form and hide employee details and logout button
+			document.getElementById("loginCard").classList.remove("hidden");
+			document.getElementById("employeeDetails").classList.add("hidden");
+			document.getElementById("logoutBtn").classList.add("hidden");
+		}
+	</script>
+</body>
+
+</html>

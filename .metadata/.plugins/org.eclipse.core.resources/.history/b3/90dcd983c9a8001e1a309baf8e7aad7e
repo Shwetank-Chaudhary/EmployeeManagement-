@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ABOUT PROJECT</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+		type="text/css">
+
+	<style>
+		.header {
+			padding: 60px;
+			text-align: center;
+			background: #1abc9c;
+			color: white;
+			font-size: 30px;
+		}
+
+		#logout {
+			position: absolute;
+			right: 30px;
+			top: 2px;
+		}
+	</style>
+</head>
+
+<body>
+	<ul class="nav nav-tabs">
+		<!-- Logo -->
+		<li class="nav-item">
+			<a class="navbar-brand" href="Home.html">
+				<img src="https://drive.google.com/uc?id=1iFuzqzRuZ8NSsH9akJaVqbD3UM7I9Yh6" alt="Logo" height="40"
+					width="40">
+			</a>
+		</li>
+		<li class="nav-item-active">
+			<a class="nav-link" href="AboutUs.html">About Us</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="./Registration.html">Registration</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="ADMIN_showemp.html">Show All Emps</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="http://localhost:8761/">Eureka</a>
+		</li>
+
+		<li class="nav-item">
+			<a href="http://localhost:1080/logout"><button class="btn btn-danger" id="logout">Logout</button></a>
+		</li>
+	</ul>
+	<div class="header">
+		<h1>ABOUT PROJECT</h1>
+	</div>
+		<ul><h2>All the services are only accessble if you sign in as admin.<br>
+		<b>Username: admin &nbsp; password: password</b></h2></ul>
+		<h3>
+			<ul>Insert Service:
+			<h4><ul>Is in Registration Tab</ul></h4>
+		</h3>
+		
+		</div>
+
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>All Employee Details</title>
+	<link href="ShowEmpCss.css" rel="stylesheet">
+</head>
+
+<body>
+	
+	<div class="topnav">
+		<a class="active" href="Home.html">Home</a>
+		<a href="AboutUs.html">About</a>
+		<input id="search_employee" type="text" placeholder="Search Employee By Id">
+		<input type="button" onclick="searchEmployees()" value="Search">
+	</div>
+	<ol id="cardsContainer" style="--length: 5" role="list">
+		<h1><strong>EMPLOYEES DETAILs</strong></h1>
+		<p></p>
+	</ol>
+	</div>
+	<script>
+    var number = 1;
+    var allEmployees = [];
+
+    function fetchempdata() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://shwetank:8089/emp/show", true);
+        xhr.onload = function () {
+            if (xhr.status == 200) {
+                var emps = JSON.parse(xhr.responseText);
+                allEmployees = emps;
+                displayData(emps);
+            } else {
+                console.error("Failed to fetch");
+            }
+        };
+
+        xhr.send();
+    }
+
+   function searchEmployees() {
+    var searchInput = document.getElementById('search_employee').value;
+    var filteredEmployees = allEmployees.filter(function (employee) {
+        var id = `${employee.id}`;
+        return id.includes(searchInput);
+    });
+
+    displayData(filteredEmployees);
+}
+
+    function displayData(emps) {
+        var cardsContainer = document.getElementById("cardsContainer");
+        cardsContainer.innerHTML = ''; // Clear existing content before displaying new results
+
+        emps.forEach(function (emp) {
+            var card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+                <li style="--i: ${number++}">
+                    <h3>${emp.first_name} ${emp.last_name}</h3>
+                    <p><span class="e_id">ID: </span>${emp.id}</p>
+                    <p><span class="position">Position: </span> ${emp.position}</p>
+                    <p><span class="user_name">User Name:</span> ${emp.username}</p>
+                    <p><b><span class="salary">Salary:</span> ${emp.salary}</b></p>
+                    <p><span class="phone Number">Phone Number:</span> ${emp.phonenumber}</p>
+                    <p><span class="Hire_Date">Date of Joining:</span> ${emp.hire_date}</p>
+                    <p><span class="Role">Role: </span> ${emp.role}</p>
+                    <form action="DeleteEmp.html">
+                        <input type="submit" value="Delete User" class="delete">
+                     </form>
+                    <form action = "Update.html">
+                    	<input type="submit" value="Update User" class="delete">
+                    </form>
+                </li>
+            `;
+            cardsContainer.appendChild(card);
+        });
+    }
+
+    fetchempdata();
+</script>
+
+</body>
+
+</html>

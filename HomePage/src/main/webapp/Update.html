@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Update Employee</title>
+	<style>
+		body {
+			font-family: 'Roboto', sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #edede9;
+			color: #333;
+		}
+
+		/* Navigation Styles */
+		nav {
+			background-color: rgb(3, 7, 192);
+			overflow: hidden;
+		}
+
+		nav a {
+			float: left;
+			display: block;
+			color: #dda15e;
+			font-weight: 400;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+		}
+
+		nav a:hover {
+			background-color: #ddd;
+			color: black;
+		}
+
+		/* Form Container Styles */
+		form {
+			max-width: 800px;
+			margin: 20px auto;
+			padding: 20px;
+			background-color: #f5ebe0;
+			border-radius: 10px;
+			box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+		}
+
+		/* Sections Styling */
+		.name_parent,
+		.div2,
+		.div3,
+		.div4 {
+			display: flex;
+			justify-content: space-evenly;
+			margin-bottom: 15px;
+			/* Added margin for spacing */
+		}
+
+		/* Page Heading Styles */
+		.page_heading {
+			color: #bc6c25;
+			text-align: center;
+		}
+
+		/* Input Styles */
+		input,select {
+			width: 100%;
+			padding: 8px;
+			margin-right: 8px;
+			margin-bottom: 15px;
+			box-sizing: border-box;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+		}
+
+		/* Button Styles */
+		button {
+			background-color: #283618;
+			color: #fff;
+			padding: 10px 15px;
+			border: none;
+			border-radius: 3px;
+			cursor: pointer;
+		}
+
+		button:hover {
+			background-color: #606c38;
+		}
+
+		/* Message Styles */
+		.msg {
+			text-align: center;
+			color: green;
+			margin-bottom: 15px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1 class="page_heading">Update Employee</h1>
+
+	<form id="employeeForm">
+		<input type="number" id="id" name="id" placeholder="Employee Id" required autocomplete="off" required>*<br>
+		<input type="email" id="username" name="username" placeholder="Email ID/UserName" required autocomplete="off" required>*<br>
+		<input type="text" id="phonenumber" name="phonenumber" placeholder="Mobile Number" required autocomplete="off" required>*<br>
+		<div class="name_parent">
+			<input class="f_name" type="text" id="f_name" name="f_name" placeholder="First Name" required>*
+			<input class="l_name" type="text" id="l_name" name="l_name" placeholder="Last Name" required>*
+		</div>
+
+		<div class="div2">
+			<input type="text" id="DOB" name="DOB" placeholder="Date Of Birth" onfocus="(this.type='date')">
+			<input type="text" id="position" name="position" placeholder="Designation" required>*
+		</div>
+
+		<div class="div3">
+			<input type="text" id="department" name="department" placeholder="Department Name" required>*
+			<input type="text" id="hire_date" name="hire_date" placeholder="Hired Date" onfocus="(this.type='date')">
+			<input type="text" id="salary" name="salary" placeholder="Salary" required>*
+		</div>
+
+		<div class="div4">
+			<input type="password" id="password" name="password" placeholder="Password" required>*
+			<input type="text" id="role" name="role" placeholder="Role" required>*
+		</div>
+
+		<button type="button" onclick="updateEmployee()">Update Employee</button>
+
+		<div class="msg" id="msg"></div>
+	</form>
+
+	<h2 id="load" class="load"></h2>
+
+	<script>
+		function updateEmployee() {
+			// Create an object with the employee data
+			var employeeData = {
+				id: document.getElementById("id").value,
+				username:document.getElementById("username").value,
+				first_name: document.getElementById("f_name").value,
+				last_name: document.getElementById("l_name").value,	
+				phonenumber:document.getElementById("phonenumber").value,
+				DOB: document.getElementById("DOB").value,
+				position: document.getElementById("position").value,
+				department: document.getElementById("department").value,
+				hire_date: document.getElementById("hire_date").value,
+				salary: document.getElementById("salary").value,
+				password: document.getElementById("password").value,
+				role: document.getElementById("role").value
+			};
+			console.log(employeeData);
+			
+			// Perform AJAX request to add the employee
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "http://localhost:9696/emp/update", true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+
+			xhr.onload = function () {
+				if (xhr.status === 202) {
+					document.getElementById("msg").innerHTML = "Employee Updated Successfully";
+				}
+				else if(xhr.status == 500){
+					document.getElementById("msg").innerHTML = "Employee Not Present.<br><a href='Registration.html'>Register User</a>";
+				} 
+				else {
+					document.getElementById("msg").innerHTML = "Failed to Update employee. Reload and Retry";
+				}
+			};
+
+			xhr.send(JSON.stringify(employeeData));
+		}
+	</script>
+</body>
+
+</html>
